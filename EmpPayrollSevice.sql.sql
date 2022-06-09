@@ -100,13 +100,110 @@ select * from EmployeePayroll INNER JOIN Employee_PayrollMapping ON Employee_Pay
 INNER JOIN Department ON Department.Deptid=Employee_PayrollMapping.Deptid;
 
 
---store procedure
+--store procedure-------------------------------------------
 
 Create proc spGetAllEmployees
 As
 Begin
+try
 Select *from Employee_Payroll;
-End
+End TRY
+BEGIN CATCH   
+  SELECT
+    ERROR_NUMBER() AS ErrorNumber,
+    ERROR_STATE() AS ErrorState,
+    ERROR_PROCEDURE() AS ErrorProcedure,
+    ERROR_LINE() AS ErrorLine,
+    ERROR_MESSAGE() AS ErrorMessage;
+END CATCH 
+
+
+-------------------------------------------------------------------
+Create or alter procedure SPAddNewEmpDetails  
+(   
+   @Name varchar (50),  
+   @Salary int,  
+   @Address varchar (50),
+   @StartDate Date ,
+   @Gender varchar(50),
+   @PhoneNumber varchar(50),
+   @Department varchar(50),
+   @Basic_Pay varchar(50),
+   @Deduction float(50),
+   @Taxable_Pay float(50),
+   @Tax float(50),
+   @Income_Tax int,
+   @Net_Pay float(50)
+)  
+as  
+begin
+try  
+   Insert into Employee_Payroll values(@Name,@salary ,@Address ,@StartDate,@Gender, @PhoneNumber, @Department,@Basic_Pay,@Deduction,
+   @Taxable_Pay,@Tax,@Income_Tax ,@Net_Pay)  
+End TRY
+BEGIN CATCH
+SELECT
+    ERROR_NUMBER() AS ErrorNumber,
+    ERROR_STATE() AS ErrorState,
+    ERROR_PROCEDURE() AS ErrorProcedure,
+    ERROR_LINE() AS ErrorLine,
+    ERROR_MESSAGE() AS ErrorMessage;
+END CATCH  
+-------------
+Create Procedure [dbo].[SPViewEmployees]  
+as  
+begin
+try  
+   select *from Employee_Payroll  
+End TRY
+BEGIN CATCH
+SELECT
+ERROR_NUMBER() AS ErrorNumber,
+    ERROR_STATE() AS ErrorState,
+    ERROR_PROCEDURE() AS ErrorProcedure,
+    ERROR_LINE() AS ErrorLine,
+    ERROR_MESSAGE() AS ErrorMessage;
+END CATCH
+-----------------------------------------------------
+Create or alter procedure [dbo].[SPUpdateEmpDetails]  
+(  
+   @Id int,  
+   @Salary varchar (50)  
+)  
+as  
+begin
+try  
+   Update Employee_Payroll   
+   set Salary=@Salary 
+   where Id=@Id  
+End TRY
+BEGIN CATCH
+SELECT
+ERROR_NUMBER() AS ErrorNumber,
+    ERROR_STATE() AS ErrorState,
+    ERROR_PROCEDURE() AS ErrorProcedure,
+    ERROR_LINE() AS ErrorLine,
+    ERROR_MESSAGE() AS ErrorMessage;
+END CATCH
+ --------------------
+ Create procedure [dbo].[SPDeleteEmpById]  
+(  
+   @Id int  
+)  
+as   
+begin
+try  
+   Delete from Employee_Payroll where Id=@Id  
+End TRY
+BEGIN CATCH
+SELECT
+ERROR_NUMBER() AS ErrorNumber,
+    ERROR_STATE() AS ErrorState,
+    ERROR_PROCEDURE() AS ErrorProcedure,
+    ERROR_LINE() AS ErrorLine,
+    ERROR_MESSAGE() AS ErrorMessage;
+END CATCH
+
 
 
 
